@@ -21,22 +21,22 @@ def obter_vizinhos(matriz_de_intensidade, linha, coluna):
 
 def aplica_regras(lista_de_vizinhos, intensidade_pixel_central, estado_pixel_central):
     #Conta o número de vizinhos vivos com a mesma intensidade que o pixel central
-    vizinhos_vivos = lista_de_vizinhos.count(intensidade_pixel_central)
+    vizinhos_iguais = lista_de_vizinhos.count(intensidade_pixel_central)
 
     #Regra 1: A célula viva com dois ou três vizinhos vivos sobrevive
-    if estado_pixel_central == 1 and (vizinhos_vivos == 2 or vizinhos_vivos == 3):
+    if estado_pixel_central == 1 and (vizinhos_iguais == 2 or vizinhos_iguais == 3):
         return 1
     
     #Regra 2: A célula viva com menos de dois vizinhos vivos morre (subpopulação)
-    elif estado_pixel_central == 1 and vizinhos_vivos < 2:
+    elif estado_pixel_central == 1 and vizinhos_iguais < 2:
         return 0
     
     #Regra 3: A célula viva com mais de três vizinhos vivos morre (superpopulação)
-    elif estado_pixel_central == 1 and vizinhos_vivos > 3:
+    elif estado_pixel_central == 1 and vizinhos_iguais > 3:
         return 0
     
     #Regra 4: A célula morta com exatamente três vizinhos vivos se torna viva (resurreição)
-    elif estado_pixel_central == 0 and vizinhos_vivos == 3:
+    elif estado_pixel_central == 0 and vizinhos_iguais == 3:
         return 1
     
     #Pra todos os outros casos, a célula permanece no mesmo estado
