@@ -55,14 +55,16 @@ def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
     return matriz_de_estados
 
 #Carrega a imagem pre processada em escala de cinza
-imagem_cinza =  cv2.imread(".\data\imagens_cinza\R2016.jpg", cv2.IMREAD_GRAYSCALE)
+#imagem_cinza =  cv2.imread(".\data\imagens_cinza\R2016.jpg", cv2.IMREAD_GRAYSCALE)
+imagem_cinza = cv2.imread(".\data\imagens_cinza\Cars36.png", cv2.IMREAD_GRAYSCALE)
 
 #Para acelerar o processo, diminui o tamanho da imagem pela metade
-imagem_cinza = cv2.resize(imagem_cinza, (480, 220))
+#imagem_cinza = cv2.resize(imagem_cinza, (480, 220))
 
 #Transforma a imagem em uma matriz com a intensidade de cada pixel
 matriz_de_intensidade = np.array(imagem_cinza)
-print(matriz_de_intensidade.shape)
+
+print(("(%d,%d)") % (matriz_de_intensidade.shape[1],matriz_de_intensidade.shape[0]))
 print("Quantidade de pixels = %d" % (matriz_de_intensidade.shape[0]*matriz_de_intensidade.shape[1]))
 
 #Cria duas matrizes com os estados iniciais, uma com todos vivos, outra com todos mortos
@@ -90,7 +92,6 @@ print(tempo_fim - tempo_inicio)
 #Phi -> estado inicial = vivo
 phi_vivos = matriz_de_intensidade.flatten()[matriz_de_estados_phi.flatten() == 1] #se manteram vivos
 phi_mortos = matriz_de_intensidade.flatten()[matriz_de_estados_phi.flatten() == 0] #morreram
-
 
 #Psi -> estado inicial = morto
 psi_vivos = matriz_de_intensidade.flatten()[matriz_de_estados_psi.flatten() == 1] #ressuscitaram 
