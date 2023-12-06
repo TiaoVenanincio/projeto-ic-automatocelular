@@ -44,8 +44,9 @@ def aplica_regras(lista_de_vizinhos, intensidade_pixel_central, estado_pixel_cen
         return estado_pixel_central
 
 def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
-    for linha in range(matriz_de_intensidade.shape[0]):
-        for coluna in range(matriz_de_intensidade.shape[1]):
+    linhas, colunas = matriz_de_intensidade.shape
+    for linha in range(linhas):
+        for coluna in range(colunas):
             #Obtem os vizinhos do pixel atual
             lista_de_vizinhos = obter_vizinhos(matriz_de_intensidade, linha, coluna)
             #Aplica as regras do jogo da vida no pixel atual
@@ -56,8 +57,13 @@ def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
 #Carrega a imagem pre processada em escala de cinza
 imagem_cinza =  cv2.imread(".\data\imagens_cinza\R2016.jpg", cv2.IMREAD_GRAYSCALE)
 
+#Para acelerar o processo, diminui o tamanho da imagem pela metade
+imagem_cinza = cv2.resize(imagem_cinza, (480, 220))
+
 #Transforma a imagem em uma matriz com a intensidade de cada pixel
 matriz_de_intensidade = np.array(imagem_cinza)
+print(matriz_de_intensidade.shape)
+print("Quantidade de pixels = %d" % (matriz_de_intensidade.shape[0]*matriz_de_intensidade.shape[1]))
 
 #Cria duas matrizes com os estados iniciais, uma com todos vivos, outra com todos mortos
 matriz_de_estados_phi = np.ones(matriz_de_intensidade.shape, dtype=int)
@@ -70,14 +76,14 @@ matriz_de_estados_psi = np.zeros(matriz_de_intensidade.shape, dtype=int)
 #print(matriz_de_estados.shape)
 #print(matriz_de_estados)
 
-#tempo_inicio = time.time()
+tempo_inicio = time.time()
 
 #Aplica as regras do jogo da vida em cada uma das matrizes de estados iniciais
 matriz_de_estados_phi = percorre_imagem_aplicando_regras(matriz_de_estados_phi, matriz_de_intensidade)
 matriz_de_estados_psi = percorre_imagem_aplicando_regras(matriz_de_estados_psi, matriz_de_intensidade)
 
-#tempo_fim = time.time()
-#print(tempo_fim - tempo_inicio)
+tempo_fim = time.time()
+print(tempo_fim - tempo_inicio)
 
 #print(matriz_de_estados_phi)
 
@@ -90,31 +96,29 @@ phi_mortos = matriz_de_intensidade.flatten()[matriz_de_estados_phi.flatten() == 
 psi_vivos = matriz_de_intensidade.flatten()[matriz_de_estados_psi.flatten() == 1] #ressuscitaram 
 psi_mortos = matriz_de_intensidade.flatten()[matriz_de_estados_psi.flatten() == 0] #se manteram mortos
 
-#print(phi_vivos)
-
 plt.figure()
-plt.hist(phi_vivos, bins=256, range=(0, 256), alpha=0.5, label='φ - Vivos')
+plt.hist(phi_vivos, bins=256, range=(0, 256), label='φ - Vivos')
 plt.title('Histograma φ - Vivos')
 plt.xlabel('Intensidade do Pixel')
 plt.ylabel('Frequência')
 plt.legend(loc='upper right')
 
 plt.figure()
-plt.hist(phi_mortos, bins=256, range=(0, 256), alpha=0.5, label='φ - Mortos')
+plt.hist(phi_mortos, bins=256, range=(0, 256), label='φ - Mortos')
 plt.title('Histograma φ - Mortos')
 plt.xlabel('Intensidade do Pixel')
 plt.ylabel('Frequência')
 plt.legend(loc='upper right')
 
 plt.figure()
-plt.hist(psi_vivos, bins=256, range=(0, 256), alpha=0.5, label='ψ - Vivos')
+plt.hist(psi_vivos, bins=256, range=(0, 256), label='ψ - Vivos')
 plt.title('Histograma ψ - Vivos')
 plt.xlabel('Intensidade do Pixel')
 plt.ylabel('Frequência')
 plt.legend(loc='upper right')
 
 plt.figure()
-plt.hist(psi_mortos, bins=256, range=(0, 256), alpha=0.5, label='ψ - Mortos')
+plt.hist(psi_mortos, bins=256, range=(0, 256), label='ψ - Mortos')
 plt.title('Histograma ψ - Mortos')
 plt.xlabel('Intensidade do Pixel')
 plt.ylabel('Frequência')
