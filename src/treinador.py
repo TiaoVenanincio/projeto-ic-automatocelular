@@ -5,11 +5,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import numpy as np
 
-dataset_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset"
-
 histogramas = []
 rotulos = []
 
+dataset_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset"
 for pasta in os.listdir(dataset_dir):
     if pasta != "histograms":
         dir_pasta = f"C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/{pasta}"
@@ -26,7 +25,6 @@ for pasta in os.listdir(dataset_dir):
                 histograma_combinado = np.concatenate([hist_phi_combined, hist_psi_combined])
 
                 histogramas.append(histograma_combinado)
-
                 rotulos.append(classe)
 
 X = np.array(histogramas)
