@@ -87,17 +87,18 @@ def gera_histogramas(imagem_cinza):
 
     return hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos
 
-histograms_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset\histograms"
+dataset_dir = f"C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset"
+
+histograms_dir = f"{dataset_dir}/histograms"
 os.makedirs(histograms_dir, exist_ok=True)
 
-train_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset\training_set"
-test_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset\test_set"
+train_dir = f"{dataset_dir}/training_set"
+test_dir = f"{dataset_dir}/test_set"
 
 #Criando as pastas para salvar o histograma
 cria_pastas_hist(test_dir, "test_set")
 cria_pastas_hist(train_dir, "training_set")
 
-dataset_dir = r"C:\Users\Sebastiao\Desktop\Projetos\projeto-ic-automatocelular\data\dataset"
 i = 0
 for pasta in os.listdir(dataset_dir):
     if pasta != "histograms":
@@ -110,13 +111,13 @@ for pasta in os.listdir(dataset_dir):
                 hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
 
                 index = imagem.split(".")[0]
-                file_path = os.path.join(f"{histograms_dir}\{pasta}\{classe}", f"{index}_phi_vivos.pkl")
+                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_phi_vivos.pkl")
                 joblib.dump(hist_phi_vivos, file_path)
-                file_path = os.path.join(f"{histograms_dir}\{pasta}\{classe}", f"{index}_phi_mortos.pkl")
+                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_phi_mortos.pkl")
                 joblib.dump(hist_phi_mortos, file_path)
-                file_path = os.path.join(f"{histograms_dir}\{pasta}\{classe}", f"{index}_psi_vivos.pkl")
+                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_psi_vivos.pkl")
                 joblib.dump(hist_psi_vivos, file_path)
-                file_path = os.path.join(f"{histograms_dir}\{pasta}\{classe}", f"{index}_psi_mortos.pkl")
+                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_psi_mortos.pkl")
                 joblib.dump(hist_psi_mortos, file_path)
                 
                 i += 1
