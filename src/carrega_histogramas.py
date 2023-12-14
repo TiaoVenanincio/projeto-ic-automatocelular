@@ -1,4 +1,3 @@
-import os
 import joblib
 
 def carrega_hist(imagem_path):

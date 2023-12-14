@@ -5,9 +5,9 @@ import joblib
 
 def cria_pastas_hist(dir, tipo):
     conteudo = os.listdir(dir)
-    pastas = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dir, conteudo_item))]
-    for pasta in pastas:
-        dir_pastas = f'C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/histograms/{tipo}/{pasta}'
+    classes = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dir, conteudo_item))]
+    for classe in classes:
+        dir_pastas = f'C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/histograms/{tipo}/{classe}'
         os.makedirs(dir_pastas, exist_ok=True)
 
 def obter_vizinhos(matriz_de_intensidade, linha, coluna):
