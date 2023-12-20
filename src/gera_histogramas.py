@@ -3,11 +3,11 @@ import cv2
 import numpy as np
 import joblib
 
-def cria_pastas_hist(dir, tipo):
+def cria_pastas_hist(dir):
     conteudo = os.listdir(dir)
     classes = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dir, conteudo_item))]
     for classe in classes:
-        dir_pastas = f'C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/histograms/{tipo}/{classe}'
+        dir_pastas = f'C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/histograms/{classe}'
         os.makedirs(dir_pastas, exist_ok=True)
 
 def obter_vizinhos(matriz_de_intensidade, linha, coluna):
@@ -62,10 +62,8 @@ def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
     return matriz_de_estados
 
 def gera_histogramas(imagem_cinza):
-    #Transforma a imagem em uma matriz com a intensidade de cada pixel
     matriz_de_intensidade = np.array(imagem_cinza)
     
-    #Cria duas matrizes com os estados iniciais, uma com todos vivos, outra com todos mortos
     matriz_de_estados_phi = np.ones(matriz_de_intensidade.shape, dtype=int)
     matriz_de_estados_psi = np.zeros(matriz_de_intensidade.shape, dtype=int)
 
@@ -92,33 +90,26 @@ dataset_dir = f"C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/d
 histograms_dir = f"{dataset_dir}/histograms"
 os.makedirs(histograms_dir, exist_ok=True)
 
-train_dir = f"{dataset_dir}/training_set"
-test_dir = f"{dataset_dir}/test_set"
-
-#Criando as pastas para salvar o histograma
-cria_pastas_hist(test_dir, "test_set")
-cria_pastas_hist(train_dir, "training_set")
+images_dir = f"{dataset_dir}/images"
+cria_pastas_hist(images_dir)
 
 i = 0
-for pasta in os.listdir(dataset_dir):
-    if pasta != "histograms":
-        dir_pasta = f"{dataset_dir}/{pasta}"
-        for classe in os.listdir(dir_pasta):
-            dir_classe = f"{dataset_dir}/{pasta}/{classe}"
-            for imagem in os.listdir(dir_classe):
-                imagem_path = f"{dataset_dir}/{pasta}/{classe}/{imagem}"
-                imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
-                hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
+for classe in os.listdir(images_dir):
+    dir_classe = f"{dataset_dir}/images/{classe}"
+    for imagem in os.listdir(dir_classe):
+        imagem_path = f"{dataset_dir}/images/{classe}/{imagem}"
+        imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
+        hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
 
-                index = imagem.split(".")[0]
-                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_phi_vivos.pkl")
-                joblib.dump(hist_phi_vivos, file_path)
-                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_phi_mortos.pkl")
-                joblib.dump(hist_phi_mortos, file_path)
-                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_psi_vivos.pkl")
-                joblib.dump(hist_psi_vivos, file_path)
-                file_path = os.path.join(f"{histograms_dir}/{pasta}/{classe}", f"{index}_psi_mortos.pkl")
-                joblib.dump(hist_psi_mortos, file_path)
+        index = imagem.split(".")[0]
+        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_vivos.pkl")
+        joblib.dump(hist_phi_vivos, file_path)
+        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_mortos.pkl")
+        joblib.dump(hist_phi_mortos, file_path)
+        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_vivos.pkl")
+        joblib.dump(hist_psi_vivos, file_path)
+        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_mortos.pkl")
+        joblib.dump(hist_psi_mortos, file_path)
                 
-                i += 1
-                print("Progresso = %0.1f por cento" % (i / 1000 * 100))
+        i += 1
+        print("Progresso = %0.1f por cento" % (i / 1000 * 100))
