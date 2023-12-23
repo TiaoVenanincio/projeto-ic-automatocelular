@@ -3,11 +3,17 @@ import cv2
 import numpy as np
 import joblib
 
-def cria_pastas_hist(dir):
-    conteudo = os.listdir(dir)
-    classes = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dir, conteudo_item))]
+#O objetivo desse código é gerar e salvar os histogramas para cada imagem do dataet
+
+def cria_pastas_hist(dataset_dir):
+    #Cria as pastas para salvar os histogramas mantendo o padrão das classes do dataset
+    histograms_dir = f"{dataset_dir}/histograms"
+    os.makedirs(histograms_dir, exist_ok=True)
+
+    conteudo = os.listdir(f"{dataset_dir}/images")
+    classes = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dataset_dir, conteudo_item))]
     for classe in classes:
-        dir_pastas = f'C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset/histograms/{classe}'
+        dir_pastas = f'{dataset_dir}/histograms/{classe}'
         os.makedirs(dir_pastas, exist_ok=True)
 
 def obter_vizinhos(matriz_de_intensidade, linha, coluna):
@@ -16,12 +22,8 @@ def obter_vizinhos(matriz_de_intensidade, linha, coluna):
     vizinhos = matriz_de_intensidade[max(0, linha-1):min(matriz_de_intensidade.shape[0], linha+2),
                              max(0, coluna-1):min(matriz_de_intensidade.shape[1], coluna+2)]
 
-    #print("Pixel e seus vizinhos:")
-    #print(vizinhos)
-
+    #Transforma a matriz particionada em lista e remove o pixel do centro
     lista_de_vizinhos = vizinhos.flatten().tolist()
-
-    #Remove o pixel central da lista
     lista_de_vizinhos.remove(matriz_de_intensidade[linha, coluna]) 
 
     return lista_de_vizinhos
@@ -62,14 +64,18 @@ def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
     return matriz_de_estados
 
 def gera_histogramas(imagem_cinza):
+    #Transforma a imagem em uma matriz de intensidade
     matriz_de_intensidade = np.array(imagem_cinza)
     
-    matriz_de_estados_phi = np.ones(matriz_de_intensidade.shape, dtype=int)
-    matriz_de_estados_psi = np.zeros(matriz_de_intensidade.shape, dtype=int)
+    #Cria as matrizes de estados iniciais
+    matriz_de_estados_phi = np.ones(matriz_de_intensidade.shape, dtype=int) #todos vivos
+    matriz_de_estados_psi = np.zeros(matriz_de_intensidade.shape, dtype=int) #todos mortos
 
+    #Aplica as regras do jogo da vida e atualiza as matrizes de estado inicial
     matriz_de_estados_phi = percorre_imagem_aplicando_regras(matriz_de_estados_phi, matriz_de_intensidade)
     matriz_de_estados_psi = percorre_imagem_aplicando_regras(matriz_de_estados_psi, matriz_de_intensidade)
 
+    #As matrizes são convertidas em listas
     #Phi -> estado inicial = vivo
     phi_vivos = matriz_de_intensidade.flatten()[matriz_de_estados_phi.flatten() == 1] #se manteram vivos
     phi_mortos = matriz_de_intensidade.flatten()[matriz_de_estados_phi.flatten() == 0] #morreram
@@ -78,6 +84,7 @@ def gera_histogramas(imagem_cinza):
     psi_vivos = matriz_de_intensidade.flatten()[matriz_de_estados_psi.flatten() == 1] #ressuscitaram 
     psi_mortos = matriz_de_intensidade.flatten()[matriz_de_estados_psi.flatten() == 0] #se manteram mortos
 
+    #Cria os histogramas
     hist_phi_vivos, _ = np.histogram(phi_vivos, bins=256, range=(0, 256))
     hist_phi_mortos, _ = np.histogram(phi_mortos, bins=256, range=(0, 256))
     hist_psi_vivos, _ = np.histogram(psi_vivos, bins=256, range=(0, 256))
@@ -85,31 +92,33 @@ def gera_histogramas(imagem_cinza):
 
     return hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos
 
-dataset_dir = f"C:/Users/Sebastiao/Desktop/Projetos/projeto-ic-automatocelular/data/dataset"
+def gerador_histogramas(dataset_dir):
+    #Funcao principal: faz a chamada das funções acima e salva os histogramas
 
-histograms_dir = f"{dataset_dir}/histograms"
-os.makedirs(histograms_dir, exist_ok=True)
+    #Criando as pastas das classes
+    cria_pastas_hist(dataset_dir)
 
-images_dir = f"{dataset_dir}/images"
-cria_pastas_hist(images_dir)
+    images_dir = f"{dataset_dir}/images"
+    histograms_dir = f"{dataset_dir}/histograms"
+    
+    i = 0
+    for classe in os.listdir(images_dir):
+        dir_classe = f"{images_dir}/{classe}"
+        
+        for imagem in os.listdir(dir_classe):
+            imagem_path = f"{images_dir}/{classe}/{imagem}"
+            imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
+            hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
 
-i = 0
-for classe in os.listdir(images_dir):
-    dir_classe = f"{dataset_dir}/images/{classe}"
-    for imagem in os.listdir(dir_classe):
-        imagem_path = f"{dataset_dir}/images/{classe}/{imagem}"
-        imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
-        hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
-
-        index = imagem.split(".")[0]
-        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_vivos.pkl")
-        joblib.dump(hist_phi_vivos, file_path)
-        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_mortos.pkl")
-        joblib.dump(hist_phi_mortos, file_path)
-        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_vivos.pkl")
-        joblib.dump(hist_psi_vivos, file_path)
-        file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_mortos.pkl")
-        joblib.dump(hist_psi_mortos, file_path)
-                
-        i += 1
-        print("Progresso = %0.1f por cento" % (i / 1000 * 100))
+            index = imagem.split(".")[0]
+            file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_vivos.pkl")
+            joblib.dump(hist_phi_vivos, file_path)
+            file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_phi_mortos.pkl")
+            joblib.dump(hist_phi_mortos, file_path)
+            file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_vivos.pkl")
+            joblib.dump(hist_psi_vivos, file_path)
+            file_path = os.path.join(f"{histograms_dir}/{classe}", f"{index}_psi_mortos.pkl")
+            joblib.dump(hist_psi_mortos, file_path)
+                    
+            i += 1
+            print("Progresso = %0.1f por cento" % (i / 1000 * 100))
