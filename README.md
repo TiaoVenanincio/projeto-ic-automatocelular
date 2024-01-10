@@ -1,4 +1,4 @@
-# Projeto de Iniciação Científica
+<center># Projeto de Iniciação Científica</center>
 # Descritor baseado em autômato celular para classificação depixels
 
 
