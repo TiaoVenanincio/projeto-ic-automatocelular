@@ -1,5 +1,5 @@
 <center># Projeto de Iniciação Científica</center>
-# Descritor baseado em autômato celular para classificação depixels
+# Descritor baseado em autômato celular para classificação de pixels
 
 
 ## Visão Geral
@@ -11,3 +11,4 @@ A pasta src abriga os códigos do projeto, os quais são responsáveis por gerar
 A pasta data abriga o dataset utilizado (Corel-1k), os logs e as matrizes de confusão gerados em cada combinação de histograma testada 
 O código main.py, por onde os outros códigos são chamados.
 O arquivo requirements.txt onde as depêndencias do projeto estão listadas.
+
