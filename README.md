@@ -1,5 +1,4 @@
-<center># Projeto de Iniciação Científica</center>
-# Descritor baseado em autômato celular para classificação de pixels
+# Projeto de Iniciação Científica - Análise e Classificação de Pixels com Autômatos Celulares
 
 
 ## Visão Geral
