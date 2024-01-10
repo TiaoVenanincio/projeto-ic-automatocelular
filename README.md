@@ -1,6 +1,5 @@
 # Projeto de Iniciação Científica
-## Descritor baseado em autômato celular para classificação de
-pixels
+# Descritor baseado em autômato celular para classificação depixels
 
 
 ## Visão Geral
