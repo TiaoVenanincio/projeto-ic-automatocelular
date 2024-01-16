@@ -2,10 +2,12 @@ from src.testa_combinacoes import *
 from src.gera_histogramas import *
 from src.gera_matriz_confusao import *
 
-dir_images = f"data/dataset/images"
-dir_dataset = f"data/dataset"
+dir_data = f"data"
+dir_dataset = f"{dir_data}/dataset"
+dir_images = f"{dir_dataset}/images"
 
-#Se for a primeira vez executando o código, primeiro gere os histogramas, depois teste as combinações e por fim gere a matriz e os logs
+
+#Se for a primeira vez executando o código, primeiro gere os histogramas, depois teste as combinações e, por fim, gere a matriz e os logs
 
 print("... Menu ...")
 print("1. Gerar histogramas para cada imagem")
@@ -22,4 +24,4 @@ while opcao >= 1 and opcao <= 3:
     elif opcao == 2:
         testador(dir_images)
     elif opcao == 3:
-        matriz_logs(dir_images)
+        matriz_logs(dir_data)
