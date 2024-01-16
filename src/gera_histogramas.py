@@ -3,20 +3,10 @@ import cv2
 import numpy as np
 import joblib
 
-#O objetivo desse código é gerar e salvar os histogramas para cada imagem do dataet
-
-def cria_pastas_hist(dataset_dir):
-    #Cria as pastas para salvar os histogramas mantendo o padrão das classes do dataset
-    histograms_dir = f"{dataset_dir}/histograms"
-    os.makedirs(histograms_dir, exist_ok=True)
-
-    conteudo = os.listdir(f"{dataset_dir}/images")
-    classes = [conteudo_item for conteudo_item in conteudo if os.path.isdir(os.path.join(dataset_dir, conteudo_item))]
-    for classe in classes:
-        dir_pastas = f'{dataset_dir}/histograms/{classe}'
-        os.makedirs(dir_pastas, exist_ok=True)
 
 def obter_vizinhos(matriz_de_intensidade, linha, coluna):
+    # O objetivo dessa função é retornar uma lista contendo a intensidade dos 9 vizinhos do pixel observado
+
     #Esse método de partição da matriz foi escolhido para manter a analise dos pixels vizinhos
     #dentro dos limites da matriz de intensidade, evitando assim valores negativos ou fora do shape.
     vizinhos = matriz_de_intensidade[max(0, linha-1):min(matriz_de_intensidade.shape[0], linha+2),
@@ -29,6 +19,9 @@ def obter_vizinhos(matriz_de_intensidade, linha, coluna):
     return lista_de_vizinhos
 
 def aplica_regras(lista_de_vizinhos, intensidade_pixel_central, estado_pixel_central):
+    #O objetivo dessa função é aplicar as regras do jogo da vida de Conway no pixel observado e retornar seu estado.
+    # 1 = vivo, 0 = morto
+
     #Conta o número de vizinhos vivos com a mesma intensidade que o pixel central
     vizinhos_iguais = lista_de_vizinhos.count(intensidade_pixel_central)
 
@@ -53,17 +46,22 @@ def aplica_regras(lista_de_vizinhos, intensidade_pixel_central, estado_pixel_cen
         return estado_pixel_central
 
 def percorre_imagem_aplicando_regras(matriz_de_estados, matriz_de_intensidade):
+    # O objetivo dessa função é percorrer a imagem, chamar a função para obter os vizinhos e aplicar as regras
+
     linhas, colunas = matriz_de_intensidade.shape
     for linha in range(linhas):
         for coluna in range(colunas):
             #Obtem os vizinhos do pixel atual
             lista_de_vizinhos = obter_vizinhos(matriz_de_intensidade, linha, coluna)
-            #Aplica as regras do jogo da vida no pixel atual
+            #Aplica as regras do jogo da vida no pixel atual (atualiza a matriz de estado inicial)
             matriz_de_estados[linha, coluna] = aplica_regras(lista_de_vizinhos, matriz_de_intensidade[linha, coluna], matriz_de_estados[linha, coluna])
  
     return matriz_de_estados
 
 def gera_histogramas(imagem_cinza):
+    #O objetivo dessa função é criar as matriz de intensidade e as de estado inicial para cada imagem
+    #Após aplicar as regras cria os histogramas
+
     #Transforma a imagem em uma matriz de intensidade
     matriz_de_intensidade = np.array(imagem_cinza)
     
@@ -95,18 +93,25 @@ def gera_histogramas(imagem_cinza):
 def gerador_histogramas(dataset_dir):
     #Funcao principal: faz a chamada das funções acima e salva os histogramas
 
-    #Criando as pastas das classes
-    cria_pastas_hist(dataset_dir)
-
     images_dir = f"{dataset_dir}/images"
     histograms_dir = f"{dataset_dir}/histograms"
-    
+
+    # Cria as pastas para salvar os histogramas mantendo o padrão das classes do dataset
+    os.makedirs(histograms_dir, exist_ok=True)
+
+    classes = [conteudo_item for conteudo_item in os.listdir(images_dir) if os.path.isdir(os.path.join(images_dir, conteudo_item))]
+    for classe in classes:
+        dir_pastas = os.path.join(histograms_dir, classe)
+        os.makedirs(dir_pastas, exist_ok=True)
+
     i = 0
+    #Esse loop pega a imagem, gera seus histogramas e salva com base no nome da classe e da imagem
     for classe in os.listdir(images_dir):
         dir_classe = f"{images_dir}/{classe}"
-        
+
         for imagem in os.listdir(dir_classe):
             imagem_path = f"{images_dir}/{classe}/{imagem}"
+
             imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
             hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
 
