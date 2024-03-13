@@ -1,4 +1,4 @@
-# Projeto de Iniciação Científica - Análise e Classificação de Pixels com Autômatos Celulares
+# Projeto de Iniciação Científica - Análise e Classificação de Pixels com Autômatos Celulares (Em processo de construção)
 
 
 ## Visão Geral
