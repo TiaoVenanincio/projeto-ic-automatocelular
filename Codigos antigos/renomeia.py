@@ -3,7 +3,6 @@ import os
 dataset_dir = "./data/dataset_1"
 images_dir = f"{dataset_dir}/images"
 
-#Esse loop pega a imagem, gera seus histogramas e salva com base no nome da classe e da imagem
 for classe in os.listdir(images_dir):
     dir_classe = f"{images_dir}/{classe}"
     i = 0
