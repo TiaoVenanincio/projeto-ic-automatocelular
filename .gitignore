@@ -3,3 +3,4 @@
 *.txt
 *.jpg
 data/*
+.ipynb_checkpoints
