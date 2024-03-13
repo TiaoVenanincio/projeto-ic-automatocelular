@@ -6,8 +6,19 @@ Este repositório abriga o código-fonte e materiais relacionados ao projeto de 
 O objetivo central é desenvolver uma abordagem eficaz para a análise e descrição de pixels, utilizando autômatos celulares para modelar relações discretas locais e propagar esses processos para discriminar eficientemente imagens como um todo.
 
 ## Estrutura do Projeto
-A pasta src abriga os códigos do projeto, os quais são responsáveis por gerar e carregar os histogramas de cada imagem, como também testar diferentes combinaçõs dos histogramas no treinamento, com o objetivo de encontrar a melhor opção, e gerar a matriz de confusão para analisar em qual classe o algoritmo está com maior dificuldade.
-A pasta data abriga o dataset utilizado (Corel-1k), os logs e as matrizes de confusão gerados em cada combinação de histograma testada 
-O código main.py, por onde os outros códigos são chamados.
-O arquivo requirements.txt onde as depêndencias do projeto estão listadas.
+
+### Códigos
+- O código atual está no notebook "AutomatosCelulares.ipynb" (EM CONSTRUÇÃO)
+- Esse código implementa uma versão que trabalha com escala de cinzas e com RGB (EM CONSTRUÇÃO)
+- O diretório "Codigos antigos" armazena os primeiros códigos deste projeto (DESCONTINUADO)
+
+### Data
+- O diretório "data" armazena os datasets utilizados no projeto
+- "dataset" utiliza o conjunto de imagens "Corel1k"
+- "dataset_1" utiliza o conjunto de imagens "Caltech256"
+- Dentro destes diretórios, há dois subdiretórios, um para as imagens e outro para os histogramas extraídos
+- Ambos os conjuntos de imagens podem ser encontrados na plataforma "Kaggle"
+
+### Requirements.txt
+- As depêndencias do projeto estão listadas no arquivo requirements.txt
 
