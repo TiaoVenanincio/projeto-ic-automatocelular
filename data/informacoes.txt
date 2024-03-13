@@ -1,9 +1,0 @@
-0:hist_phi_vivos:0.655:100
-1:hist_phi_mortos:0.69:100
-2:hist_psi_vivos:0.625:175
-3:hist_psi_mortos:0.695:200
-4:hist_phi_combined:0.75:250
-5:hist_psi_combined:0.75:100
-6:hist_vivos_combined:0.67:200
-7:hist_mortos_combined:0.71:125
-8:all_combined:0.735:125

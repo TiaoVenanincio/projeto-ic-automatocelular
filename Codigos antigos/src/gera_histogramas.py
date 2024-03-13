@@ -113,6 +113,12 @@ def gerador_histogramas(dataset_dir):
             imagem_path = f"{images_dir}/{classe}/{imagem}"
 
             imagem_cinza = cv2.imread(imagem_path, cv2.IMREAD_GRAYSCALE)
+            
+            imagem_cinza = cv2.resize(imagem_cinza, (128,128))
+            #Dimensao original = 384 * 256 = 98304
+            #Resize = 128 * 128 = 16384
+            #Redução = (16384-98304)/98304*100 = 83,33% 
+
             hist_phi_vivos, hist_phi_mortos, hist_psi_vivos, hist_psi_mortos = gera_histogramas(imagem_cinza)
 
             index = imagem.split(".")[0]
@@ -127,3 +133,6 @@ def gerador_histogramas(dataset_dir):
                     
             i += 1
             print("Progresso = %0.1f por cento" % (i / 1000 * 100))
+
+    os.system('clear')
+    print("Progresso concluído")

@@ -1,3 +1,7 @@
+# O objetivo desse código é testar diferentes combinações e "n_estimators"
+#de histogramas para observar qual gera melhor acurácia para o modelo
+
+
 import os
 from src.carrega_histogramas import carrega_hist
 from sklearn.ensemble import RandomForestClassifier

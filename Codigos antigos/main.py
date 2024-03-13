@@ -9,14 +9,13 @@ dir_images = f"{dir_dataset}/images"
 
 #Se for a primeira vez executando o código, primeiro gere os histogramas, depois teste as combinações e, por fim, gere a matriz e os logs
 
-print("... Menu ...")
-print("1. Gerar histogramas para cada imagem")
-print("2. Testar combinações dos histogramas")
-print("3. Gerar matriz de confusao e logs")
-
-
 opcao = 1
 while opcao >= 1 and opcao <= 3:
+    print("... Menu ...")
+    print("1. Gerar histogramas para cada imagem")
+    print("2. Testar combinações dos histogramas")
+    print("3. Gerar matriz de confusao e logs")
+    
     opcao =  int(input("\nInsira uma opcao: "))
 
     if opcao == 1:

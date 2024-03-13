@@ -1,4 +1,5 @@
-import pandas as pd
+#O objetivo desse código é testar diferentes modelos de aprendizado de máquina
+
 import numpy as np
 import plotly.offline as py
 import plotly.graph_objs as go
