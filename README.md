@@ -16,8 +16,12 @@ O objetivo central é desenvolver uma abordagem eficaz para a análise e descri�
 - O diretório "data" armazena os datasets utilizados no projeto
 - "dataset" utiliza o conjunto de imagens "Corel1k"
 - "dataset_1" utiliza o conjunto de imagens "Caltech256"
+- "dataset_2" utiliza o conjunto de imagens "CIFAR-100"
 - Dentro destes diretórios há alguns subdiretórios, um para as imagens e outros para os histogramas extraídos
-- Ambos os conjuntos de imagens podem ser encontrados na plataforma "Kaggle"
+- Os conjuntos de imagens podem ser encontrados nos links abaixo:
+- [Corel-1k](https://www.kaggle.com/datasets/elkamel/corel-images)
+- [Caltech256](https://data.caltech.edu/records/nyy15-4j048)
+- [CIFAR100](https://github.com/knjcode/cifar2png)
 
 ### Requirements.txt
 - As depêndencias do projeto estão listadas no arquivo requirements.txt
